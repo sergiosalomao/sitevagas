@@ -21,15 +21,18 @@ class EmpresaRequest extends FormRequest
     public function rules()
     {
         return [
-            'titulo' => 'required|max:100',
+            'nome' => 'required',
+            'email' => 'required',
+            'imagem' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'titulo.required' => 'Titulo requerido',
-            'titulo.max'  => 'maximo 100 caracteres'
+            'nome.required' => 'Nome é obrigatorio',
+            'email.required' => 'email é obrigatorio',
+            'imagem.required' => 'imagem é obrigatorio'
         ];
     }
 

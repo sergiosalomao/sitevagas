@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
+use Hamcrest\Type\IsNumeric;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -13,8 +15,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        
         $credentials = $request->only('email', 'password');
-
+        
         if ($token = $this->guard()->attempt($credentials)) {
             return $this->respondWithToken($token);
         }
@@ -61,7 +64,7 @@ class AuthController extends Controller
         $user = User::create([
             'name'    => $request->name,
             'email'    => $request->email,
-             'password' => $request->password,
+             'password' => Hash::make($request->password),
          ]);
         $token = auth()->login($user);
         return $this->respondWithToken($token);

@@ -20,8 +20,12 @@ class CreateVagasTable extends Migration
             $table->integer('visualizacoes');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');               
+            $table->unsignedBigInteger('empresa_id');
+            $table->foreign('empresa_id')->references('id')->on('empresas');               
             $table->enum('status',['ativa','inativa']);
-            $table->date('data_expiracao');         
+            $table->date('data_publicacao');         
+            $table->date('data_expiracao');
+            $table->string('tipo');                     
             $table->timestamps();
         });
     }

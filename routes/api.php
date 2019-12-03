@@ -19,9 +19,10 @@ use Illuminate\Http\Request;
 
 
 Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::apiResource('vagas','VagaController');
     Route::apiResource('empresas','EmpresaController');
 });
-Route::apiResource('users','UserController');
+
+Route::apiResource('vagas','VagaController');
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
+

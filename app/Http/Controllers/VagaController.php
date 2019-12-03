@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VagaRequest;
 use Illuminate\Http\Request;
 use App\Vaga;
 
+
 class VagaController extends Controller
 {
+ 
+    public function __construct()
+    {
+        $this->middleware('jwt.verify', ['except' => ['index']]);
+    }
+    
     public function index(Request $request, Vaga $vaga)
     {
         $dados = $vaga->newQuery();
