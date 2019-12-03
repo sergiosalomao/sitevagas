@@ -3,61 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Vaga;
 
 class VagaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request, Vaga $vaga)
     {
-        //
+        $dados = $vaga->newQuery();
+        if ($request->filled('titulo')) {
+            $dados->where('titulo', $request->titulo);
+        }
+
+        if ($request->filled('descricao')) {
+            $dados->where('descricao', $request->descricao);
+        }
+
+        return $dados->orderBy('titulo')->paginate(10);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(VagaRequest $request)
     {
-        //
+        Vaga::create($request->all());
+        return response('salvo com sucesso', 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
-        //
+        return response(['dados' => Vaga::findOrFail($id)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $dados = $request->all();
+        $vaga = Vaga::findOrFail($id);
+        $vaga->update($dados);
+
+        return response('atualizado com sucesso', 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        //
+        $vaga = Vaga::findOrFail($id);
+        $vaga->delete();
     }
 }

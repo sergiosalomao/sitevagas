@@ -3,61 +3,53 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\EmpresaRequest;
+use App\Empresa;
 
 class EmpresaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+   
+    public function index(Request $request, Empresa $empresa)
     {
-        //
+        $dados = $empresa->newQuery();
+        if ($request->filled('nome')) {
+            $dados->where('nome', $request->nome);
+        }
+
+        if ($request->filled('email')) {
+            $dados->where('email', $request->email);
+        }
+
+        return $dados->orderBy('nome')->paginate(10);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+   
+  
+    public function store(EmpresaRequest $request)
     {
-        //
+       
+        $dados = $request->all();
+        Empresa::create($dados);
+        return response('salvo com sucesso', 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        return response(['dados' => Empresa::findOrFail($id)]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $dados = $request->all();
+        $user = Empresa::findOrFail($id);
+        $user->update($dados);
+        
+        return response('atualizado com sucesso', 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $user = Empresa::findOrFail($id);
+        $user->delete();
     }
 }
